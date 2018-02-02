@@ -133,9 +133,9 @@ int main(void)
 				// extract command input
 				switch(command[0]) {
 					case 'l':
-                        buffer = fopen("buffer", "rw");
                         if(!fork()) {
-                            execl("/bin/ls", "ls", buffer, (char *)0);           
+                            execlp("sh", "sh", "-c",  buff, (char *)0);           
+                            send(new_fd, buff, 1000, 0);
                         }
 					case 'c':
 					case 'p':

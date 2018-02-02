@@ -81,21 +81,23 @@ int main(int argc, char *argv[])
 	freeaddrinfo(servinfo); // all done with this structure
 
 	while (!quit) {
-		if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
-		    perror("recv");
-		    exit(1);
-		}
+        recv(sockfd, buf, 100, 0);
+
 		printf("%s",buf);
 		scanf("%s", command);
 		send(sockfd, command, 100, 0);
 
-		if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
-		    perror("recv");
-		    exit(1);
-		}
-		buf[numbytes] = '\0';
+        recv(sockfd, buf, 100, 0);
 
-		printf("%s",buf);
+        switch(buf[0]) {
+            case 'q':
+                quit = 1;
+                printf("Quiting program\n");
+                break;
+            default:
+                break;
+        }
+
 	}
 		close(sockfd);
 
