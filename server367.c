@@ -44,8 +44,10 @@ int main(void)
 	int yes=1;
 	char s[INET6_ADDRSTRLEN];
 	int rv;
-	char command[50]; // command string for client
+	char command[100]; // command string for client
 	int quit = 0; // flag to exit command loop
+    char buff[1000]; // buffer string
+    FILE *buffer;   // buffer file
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
@@ -103,6 +105,7 @@ int main(void)
 	printf("server: waiting for connections...\n");
 
 	while(1) {  // main accept() loop
+        quit = 0;
 		sin_size = sizeof their_addr;
 		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
 		if (new_fd == -1) {
@@ -114,14 +117,14 @@ int main(void)
 			get_in_addr((struct sockaddr *)&their_addr),
 			s, sizeof s);
 		printf("server: got connection from %s\n", s);
-
+        
 		if (!fork()) { // this is the child process
 			close(sockfd); // child doesn't need the listener
 			if (send(new_fd, "Command (type 'h' for help): ", 29, 0) == -1){
 				perror("send");
 			}
-			// loop for command input
-			while (!quit) {
+
+			while (!quit) { // loop for command input
 				// clear command array
 				memset(&command[0], 0, sizeof(command));
 				// code to read command input
@@ -130,6 +133,10 @@ int main(void)
 				// extract command input
 				switch(command[0]) {
 					case 'l':
+                        buffer = fopen("buffer", "rw");
+                        if(!fork()) {
+                            execl("/bin/ls", "ls", buffer, (char *)0);           
+                        }
 					case 'c':
 					case 'p':
 					case 'd':
