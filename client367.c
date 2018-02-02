@@ -16,7 +16,7 @@
 
 #define PORT "3502" // the port client will be connecting to 
 
-#define MAXDATASIZE 100 // max number of bytes we can get at once 
+#define MAXDATASIZE 1000 // max number of bytes we can get at once 
 
 // get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
@@ -80,21 +80,47 @@ int main(int argc, char *argv[])
 
 	freeaddrinfo(servinfo); // all done with this structure
 
+    printf("Command (type 'h' for help): ");
+
 	while (!quit) {
-        recv(sockfd, buf, 100, 0);
-
-		printf("%s",buf);
 		scanf("%s", command);
-		send(sockfd, command, 100, 0);
-
-        recv(sockfd, buf, 100, 0);
-
+        send(sockfd, command, 1000, 0);
+        
+        recv(sockfd, buf, 1000, 0); // extract command details
+        
         switch(buf[0]) {
+            case 'l':
+                if(fork() == 0) {
+                    execl("/bin/ls", "ls", "-l", (char *)0);
+                }
+                break;
+            case 'c':
+                printf("Check\n");
+                break;
+            case 'p':
+                printf("Display\n");
+                break;
+            case 'd':
+                printf("Download\n");
+                break;
             case 'q':
                 quit = 1;
                 printf("Quiting program\n");
                 break;
+            case 'h':
+                printf("Help menu:\n");
+                printf("l: List the contents of the directory\n");
+                printf("c: Check <filename>\n");
+                printf("p: Display <filename>\n");
+                printf("d: Download <filename>\n");
+                printf("q: Quit\n");
+                printf("h: Help\n");
+                break;
+            case '~':
+                printf("Invalid Command!\n");
+                break;
             default:
+                printf("Command (type 'h' for help): ");
                 break;
         }
 
