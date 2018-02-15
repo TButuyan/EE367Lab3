@@ -36,35 +36,6 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-void filename(char *buf, char *output) { // extract filename
-    int flag, index1, index2, space;
-    flag = index1 = index2 = space = 0;
-
-    while(!flag) {
-        if(buf[index1] == ' ') {
-            space = 1;
-        }
-        if (buf[index1] != ' ') {
-            if (space != 1) {
-                index1++;
-            }
-            else {
-                buf[index1] = output[index2];
-                if (buf[index1] == '\0') {
-                    flag = 1;
-                }
-                else {
-                    index1++;
-                    index2++;
-                }
-            }
-        }
-    }
-    return;
-}
-
-
-
 int main(void)
 {
     int sockfd, new_fd;  // listen on sock_fd, new connection on new_fd
@@ -171,18 +142,26 @@ int main(void)
                         send(new_fd, "l", 1, 0);
                         break;
                     case 'c':
-                        filename(command, file);
                         if(fork() == 0) {
-                            printf("%s is the filename\n", &file);
+                            printf("client called check\n");
                         }
                         send(new_fd, "c", 1, 0);
                         break;
                     case 'p':
+                        if(fork() == 0) {
+                            printf("client called display\n");
+                        }
                         send(new_fd, "p", 1, 0);
                         break;
                     case 'd':
+                        if(fork() == 0) {
+                            printf("client called download\n");
+                        }
                         break;
                     case 'q': 
+                        if (fork() == 0) {
+                            printf("client quit\n");
+                        }
                         quit = 1;
                         send(new_fd, "q", 1, 0); //q is quit
                         break;
