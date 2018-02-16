@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 		char filename[MAXDATASIZE];
 		freeaddrinfo(servinfo); // all done with this structure
 
-		printf("Connected to client\n");
+		printf("Connected to server\n");
 		printf("Enter command (Enter 'h' for help', 'q' to quit): ");
 		scanf("%c", &cmd);
 		while (getchar() != '\n') continue;
@@ -95,6 +95,7 @@ int main(int argc, char *argv[]) {
 			send(sockfd, "list", 4, 0);
 			numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0);
 			buf[numbytes] = '\0';
+            printf("List of files on server:\n");
 			printf("%s\n", buf);
 		}
 		if (cmd == 'c') {
