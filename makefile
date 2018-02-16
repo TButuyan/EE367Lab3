@@ -6,8 +6,5 @@ client367: client367.o
 server367: server367.o
 	gcc server367.c -lm myserver
 
-clean:
-	rm -f *.o
-
-real_clean: clean
+clean: clean
 	rm -f myclient myserver
