@@ -1,4 +1,4 @@
-/* Jaymark Ganibi
+/* Jaymark Ganibi / Tyler Butuyan
  * EE367
  * 2/15/18
  * server367.c -- a stream socket server demo
@@ -118,7 +118,7 @@ int main() {
 				s, sizeof s);
 		printf("server: got connection from %s\n", s);
 
-		if (!fork()) {
+		if (fork() == 0) {
 			close(sockfd);
 			if ((numbytes = recv(new_fd, rec_cmd, 100 - 1, 0)) == -1) {
 				perror("recv");

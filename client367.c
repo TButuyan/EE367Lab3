@@ -1,5 +1,7 @@
-/*
- ** client.c -- a stream socket client demo
+/* Jarmark Ganibi / Tyler Butuyan
+ * EE367
+ * 2/15/18
+ * client367.c -- a stream socket client demo
  */
 
 #include <stdio.h>
