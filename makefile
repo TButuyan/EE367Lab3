@@ -1,6 +1,13 @@
-all: server367.c client367.c
+all: client367 server367
 
-	gcc -o server367 server367.c
-	gcc -o client367 client367.c
+client367: client367.o
+	gcc client367.c -lm -o myclient
+
+server367: server367.o
+	gcc server367.c -lm -o myserver
+
 clean:
-	rm server367 client367
+	rm -f *.o
+
+real_clean: clean
+	rm -f myclient myserver
