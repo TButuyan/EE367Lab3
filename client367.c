@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 			printf("'c' = Check for file <file name>\n");
 			printf("'d' = Download <file name>\n");
 			printf("'p' = Display <filename>)\n");
-			printf("'q' = Quit\n");
+			printf("'q' = Quit\n\n");
 		}
 		if (cmd == 'l') {
 			send(sockfd, "list", 4, 0);
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 			char ans[3];
 			int numb;
 			send(sockfd, "chek", 4, 0);
-			printf("Which file do you want to check for?:\n");
+			printf("Which file do you want to check for?: ");
 			scanf("%s", &filename);
 			while (getchar() != '\n') continue;
 
@@ -111,16 +111,16 @@ int main(int argc, char *argv[]) {
 			buf[numb] = '\0';
 
 			if (!strcmp(buf, "yes"))
-				printf("File was found\n");
+				printf("File was found\n\n");
 			else
-				printf("File was not found\n");
+				printf("File was not found\n\n");
 
 
 		}
 		if (cmd == 'p') // display function
 		{
 			send(sockfd, "disp", 50, 0); //send server cmd input
-			printf("enter file name: \n"); //client side file name
+			printf("enter file name: "); //client side file name
 			scanf("%s", &filename);
 			int filesize;
 			char sizeofFile[20] = {0};
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 			filesize = (int) strtol(sizeofFile, (char **) NULL, 10); //Change the  chars the server sent us back to int
 			printf("Size file: %d \n", filesize);
 			if (filesize == 0) {
-				printf("File not found"); // 0 indicates file not found
+				printf("File not found\n\n"); // 0 indicates file not found
 				continue;
 			} else {
 				char *filebuff = calloc(filesize + 1, sizeof(char)); //Allocate char rray of file size
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
 
 		if(cmd == 'd'){
 			send(sockfd, "disp", 50, 0); //send server cmd input
-			printf("Enter File Name: \n"); //client side file name
+			printf("Enter File Name: "); //client side file name
 			scanf("%s", &filename);
 			int filesize;
 			char sizeofFile[20] = {0};
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
 			filesize = (int) strtol(sizeofFile, (char **) NULL, 10); //change chars the sever sent to int
 			printf("File Size: %d \n", filesize);
 			if(filesize == 0){
-				printf("File Not Found");
+				printf("File Not Found\n\n");
 				continue;
 			}
 			else {
@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 				//Write file
 				fp = fopen(filename, "w");
 				if(NULL == fp){
-					printf("Error Opening File");
+					printf("Error Opening File\n\n");
 					return 1;
 				}
 				fwrite(filebuff, 1, filesize, fp);
@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (cmd == 'q') {
-			printf("Quitting program\n");
+			printf("Quitting program\n\n");
 			return 0;
 			break;
 		}
